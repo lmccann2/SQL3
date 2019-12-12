@@ -1,0 +1,40 @@
+--Levi McCann
+--CIS 23
+--Final Assignment
+--CREATE Tables
+
+
+--Create two Primary Key tables first then Foreign Key Table last
+--In this case create Customer, AccountTypes, then Accounts
+CREATE TABLE dbo.Customer(
+
+ID int Primary Key,
+FirstName nvarchar(50) Not Null,
+LastName nvarchar(50) Not Null,
+Ssn nvarchar(20) NOT NULL
+);
+
+--The below SELECT Shows the table you just created
+--SELECT * FROM [dbo].[Customer]
+
+
+CREATE TABLE AccountTypes (
+
+ID int Primary Key, 
+Name nvarchar(50) NOT NULL
+); 
+
+--The below SELECT Shows the table you just created
+--SELECT * FROM [dbo].[AccountTypes]
+
+CREATE TABLE Accounts (
+
+ID int Primary Key, 
+Number nvarchar(50) NOT NULL, 
+Balance money NOT NULL, 
+AccountTypeID int NOT NULL FOREIGN KEY REFERENCES AccountTypes(ID),
+CustomerID int NOT NULL FOREIGN KEY REFERENCES Customer(ID)
+);
+
+--The below SELECT Shows the table you just created
+--SELECT * FROM [dbo].[Accounts]
