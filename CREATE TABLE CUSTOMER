@@ -1,0 +1,14 @@
+--Levi McCann
+--CIS 23
+--FINAL Assignment
+
+--Create a Customer Table in the BankAccounts Database
+USE BankAccounts;
+GO
+CREATE TABLE Customer (
+
+ID int Primary Key,
+FirstName nvarchar(50) Not Null,
+LastName nvarchar(50) Not Null,
+Ssn nvarchar(20) NOT NULL
+);
