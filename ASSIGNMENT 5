@@ -1,0 +1,84 @@
+-- Levi McCann
+-- CIS 23
+-- Assignment 5
+--    Create a view that returns the following columns: FirstName, MiddleName, LastName, EmailAddress, PhoneNumber, Name (PhoneNumberTypeName).
+
+ 
+
+-- You will need to create a SELECT statement inside of a CREATE VIEW statement to join the following tables together:
+
+     
+
+-- [AdventureWorks2012].[Person].[Person]
+
+-- [AdventureWorks2012].[Person].[EmailAddress]
+
+-- [AdventureWorks2012].[Person].[PersonPhone]
+
+-- [AdventureWorks2012].[Person].[PhoneNumberType]
+
+--FirstName, MiddleName, LastName, EmailAddress, PhoneNumber, Name (PhoneNumberTypeName)
+USE AdventureWorks2017;
+GO
+CREATE VIEW [dbo].[contact] AS
+SELECT c.FirstName
+      ,c.MiddleName
+      ,c.LastName
+      ,e.EmailAddress
+      ,p.PhoneNumber
+      ,n.[Name]
+
+	  FROM  [Person].[Person] c
+	  INNER JOIN [Person].[PersonPhone] p
+	  ON p.[BusinessEntityID]= c.[BusinessEntityID] 
+	  INNER JOIN [Person].[EmailAddress] e
+	  ON e.[BusinessEntityID] = c.[BusinessEntityID]
+	  INNER JOIN [Person].[PhoneNumberType] n
+	  ON n.[PhoneNumberTypeID] =p.[PhoneNumberTypeID];
+
+	  GO
+
+--Write a SELECT statement that will use
+--the view you just created in question #1
+--and order the returned data by LastName
+--ascending.
+
+USE AdventureWorks2017;
+GO
+
+SELECT * FROM [dbo].[contact]
+      ORDER BY LastName Asc;
+      GO
+	  
+	  
+--Create a stored procedure (CREATE PROCEDURE statement)
+--that returns a person’s PhoneNumber and Name (PhoneNumberTypeName)
+--when given a BusinessEntityID as an input parameter.
+--Some people have more than one phone number row, this stored procedure
+--should return all phone numbers for a person.
+
+USE AdventureWorks2017;
+GO
+
+CREATE PROC [dbo].[uspGetEmployeePhone]
+@BusinessEntityID as INT
+AS
+BEGIN
+SET NOCOUNT ON;
+
+
+SELECT pp.[phoneNumber], pnt.[Name] as [PhoneNumberType]
+		From Person.[PersonPhone] AS pp INNER JOIN
+		Person.[PersonNumberType] AS pnt
+		ON pp.PhoneNUmberTypeID = pnt.PhoneNumberTypeID
+		
+		WHERE BusinessEntityId = @BusinessEntityID
+END;
+USE AdventureWorks2017;
+GO
+
+--Write a TSQL statement that will call (execute) the stored procedure
+-- that you created in question #3. You can get the data for any
+-- Person from the database in your answer.
+
+EXEC uspGetEmployeePhone 2
