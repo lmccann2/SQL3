@@ -1,0 +1,22 @@
+--SQL
+--
+
+--Drop the Object View first
+DROP VIEW [dbo].[CustomerView]
+GO
+
+--Create a New View database object by joining tables
+CREATE VIEW [dbo].[CustomerView]
+AS
+SELECT p.FirstName
+      ,p.LastName
+	    ,p.Ssn
+	    ,n.Number
+	    ,n.Balance
+	    ,na.Name as [AccountName]
+	    FROM [dbo].[Customer] p
+	    INNER JOIN [dbo].[Accounts] n
+	    ON p.[ID] = n.[ID]
+	    INNER JOIN [dbo].[AccountTypes] na
+      ON na.[ID] = n.[ID]
+GO
