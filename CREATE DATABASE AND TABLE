@@ -1,0 +1,47 @@
+--Levi McCann
+--CIS 23
+--Final Assignment SQL
+
+-- For this final assignment you are going to use T-SQL in one or more
+-- scripts to create a database, several database tables, a view,
+-- a stored procedure, INSERT, and UPDATE statements in this
+-- new database.
+
+USE AdventureWorks2017;
+GO
+
+CREATE DATABASE BankAccounts
+GO
+ 
+
+-- Create a new database that will be used to store bank accounts.
+-- In this new database create the following database tables using
+-- T-SQL:
+
+ 
+
+--Accounts –
+
+--            Columns –
+
+--                        ID (int) Primary Key Column (unique)
+
+--                        Number (nvarchar) NOT NULL
+
+--                        Balance (money) NOT NULL
+
+--                        AccountTypeID (int) NOT NULL (Foreign Key to AccountTypes table, ID column)
+
+--                        CustomerID (int) NOT NULL (Foreign Key to Customer table, ID column)
+
+USE BankAccounts;
+GO
+
+CREATE TABLE Accounts (
+
+ID int Primary Key, 
+Number nvarchar(50) NOT NULL, 
+Balance money NOT NULL, 
+AccountTypeID int NOT NULL FOREIGN KEY REFERENCES AccountTypes(ID),
+CustomerID int NOT NULL FOREIGN KEY REFERENCES Customer(ID)
+);
