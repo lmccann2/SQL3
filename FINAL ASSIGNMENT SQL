@@ -1,0 +1,226 @@
+--Levi McCann
+--CIS 23
+--Final Assignment SQL
+--12/18/2019
+
+-- For this final assignment you are going to use T-SQL in one or more
+-- scripts to create a database, several database tables, a view,
+-- a stored procedure, INSERT, and UPDATE statements in this
+-- new database.
+
+USE AdventureWorks2017;
+GO
+
+CREATE DATABASE BankAccounts
+GO
+ 
+
+-- Create a new database that will be used to store bank accounts.
+-- In this new database create the following database tables using
+-- T-SQL:
+
+ 
+
+--Accounts –
+
+--            Columns –
+
+--                        ID (int) Primary Key Column (unique)
+
+--                        Number (nvarchar) NOT NULL
+
+--                        Balance (money) NOT NULL
+
+--                        AccountTypeID (int) NOT NULL (Foreign Key to AccountTypes table, ID column)
+
+--                        CustomerID (int) NOT NULL (Foreign Key to Customer table, ID column)
+
+USE BankAccounts;
+GO
+
+CREATE TABLE Accounts (
+
+ID int Primary Key, 
+Number nvarchar(50) NOT NULL, 
+Balance money NOT NULL, 
+AccountTypeID int NOT NULL FOREIGN KEY REFERENCES AccountTypes(ID),
+CustomerID int NOT NULL FOREIGN KEY REFERENCES Customer(ID)
+);
+                       
+
+-- AccountTypes -
+
+--            Columns –
+
+--                        ID (int) Primary Key Column (unique)
+
+--                        Name (nvarchar) NOT NULL
+
+USE BankAccounts;
+GO
+
+CREATE TABLE AccountTypes (
+
+ID int Primary Key, 
+Name nvarchar(50) NOT NULL
+); 
+
+
+-- Customer –
+
+--            Columns –
+
+==                        ID (int) Primary Key Column (unique)
+
+--                        FirstName (nvarchar) NOT NULL
+
+--                        LastName (nvarchar) NOT NULL
+
+--                        Ssn (nvarchar) NOT NULL
+
+USE BankAccounts;
+GO
+CREATE TABLE Customer (
+
+ID int Primary Key,
+FirstName nvarchar(50) Not Null,
+LastName nvarchar(50) Not Null,
+Ssn nvarchar(20) NOT NULL
+);
+ 
+
+-- Create one or more INSERT statements to insert at least 10 rows
+-- into the Accounts table, at least 2 rows into the AccountTypes table
+-- (insert a savings account type and a credit card type) and at least
+-- 5 rows into the Customer table.
+USE BankAccounts;
+Go
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (01, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (02, 1241, -3500, 3, 2)values (09, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (03, 1243, -3500, 3, 3)values (09, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (04, 1244, 500, 1, 4)values (09, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (05, 1245, 500, 2, 5)values (09, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (06, 1246, 3500, 1, 6)
+
+
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (07, 1239, 1000, 2, 07)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (08, 1240, 1000, 3, 08)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (09, 1240, 3000, 1, 1)
+INSERT INTO BankAccounts.[dbo].Accounts(ID, Number, Balance, AccountTypeID, CustomerID)
+values (10, 1241, 3500, 1, 1)
+--
+
+INSERT INTO BankAccounts.[dbo].AccountTypes (ID, Name)
+values (1, 'Checking')
+INSERT INTO BankAccounts.[dbo].AccountTypes (ID, Name)
+values (2, 'Saving')
+INSERT INTO BankAccounts.[dbo].AccountTypes (ID, Name)
+values (3, 'Credit')
+--
+INSERT INTO BankAccounts.[dbo].Customer (ID, FirstName, LastName, Ssn)
+values (1, 'Levi', 'McCann', '123456789')
+INSERT INTO BankAccounts.[dbo].Customer (ID, FirstName, LastName, Ssn)
+values (2, 'Jane', 'Doe', '222222222')
+INSERT INTO BankAccounts.[dbo].Customer (ID, FirstName, LastName, Ssn)
+values (3, 'John', 'Public', '333333333')
+INSERT INTO BankAccounts.[dbo].Customer (ID, FirstName, LastName, Ssn)
+values (4, 'Roxanne', 'Bixler', '444444444')
+
+ 
+
+--Create one or more UPDATE statements to update at least 2 rows
+-- total in the Accounts, AccountTypes or Customer table.
+
+USE BankAccounts;
+GO
+UPDATE [dbo].[Accounts]
+SET Number = 1324, Balance = 4500, AccountTypeID = 1, CustomerID = 1
+WHERE ID = 1
+Go
+
+USE BankAccounts;
+GO
+UPDATE [dbo].[Accounts]
+SET Number = 1235, Balance = 500, AccountTypeID = 2, CustomerID = 2
+WHERE ID = 2
+Go
+USE BankAccounts;
+GO
+UPDATE [dbo].[Accounts]
+SET Number = 1336, Balance = 4500, AccountTypeID = 1, CustomerID = 1
+WHERE ID = 3
+Go
+ 
+
+--Create a view that will return the FirstName, LastName, SSN
+-- from the Customer table, Number, Balance from the Accounts table
+-- and Name from the AccountTypes table.
+DROP VIEW [dbo].[CustomerView]
+GO
+
+CREATE VIEW [dbo].[CustomerView]
+AS
+SELECT p.FirstName
+      ,p.LastName
+	  ,p.Ssn
+	  ,n.Number
+	  ,n.Balance
+	  ,na.Name as [AccountName]
+	  FROM [dbo].[Customer] p
+	  INNER JOIN [dbo].[Accounts] n
+	  ON p.[ID] = n.[ID]
+	  INNER JOIN [dbo].[AccountTypes] na
+          ON na.[ID] = n.[ID]
+GO
+ 
+SELECT * FROM [dbo].[CustomerView]
+
+--Create a stored procedure that will take a Customer ID
+-- as an input parameter and return the account total balance
+-- for that person. In other words if that customer has a
+-- savings account type, add the balance of that account, subtract any
+-- credit card balance that the customer has returning the difference
+-- of the savings minus the credit card.
+
+USE BankAccounts;
+GO
+
+
+CREATE PROCEDURE [dbo].[uspGetTotalBalance] 
+@CustomerID INT
+AS
+BEGIN
+SET NOCOUNT ON;
+SELECT  at.CustomerID
+	   ,at.Balance
+       ,at.AccountTypeID
+	   ,at.CustomerID
+	   ,n.Name
+	   FROM Accounts at
+	   INNER JOIN AccountTypes n
+	   ON at.ID = n.ID
+
+
+
+SELECT SUM(Balance) as Balance
+       ,AccountTypeID
+
+
+	   FROM dbo.Accounts
+	   WHERE AccountTypeID = 3
+
+
+	   GROUP BY AccountTypeID
+	   END
+
+--Executing the Stored Procedure
+EXEC uspGetTotalBalance 3
